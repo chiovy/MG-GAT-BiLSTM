@@ -1,34 +1,36 @@
-# MG-GAT-BiLSTM 异常检测代码仓库
+# MG-GAT-BiLSTM Anomaly Detection Repository
 
-本项目为 MG-GAT-BiLSTM 时间序列异常检测模型及其消融实验、阈值分析与可视化脚本的代码实现，主要面向无人机传感器/飞行数据等多变量时间序列场景。仓库包含：
+This repository provides the implementation of the MG-GAT-BiLSTM model for multivariate time-series anomaly detection, together with ablation experiments, threshold analysis, and visualization scripts. It mainly targets UAV sensor/flight data, but the code is applicable to general multivariate time series.
 
-- MG-GAT-BiLSTM 及多种变体模型
-- 与 MLP、BiLSTM、CNN-LSTM、GRU、Transformer 等基线模型的对比
-- 全局注意力与多图机制的消融实验
-- 多种无监督阈值设定方法（POT-EVT、MAD、IQR、3-Sigma）的对比分析
-- 雷达图和异常分数曲线等可视化脚本
+The repository includes:
 
-## 目录结构
+- MG-GAT-BiLSTM and several model variants
+- Comparisons with baseline models: MLP, BiLSTM, CNN-LSTM, GRU, Transformer
+- Ablation experiments on the global attention and multi-graph modules
+- Multiple unsupervised thresholding methods (POT-EVT, MAD, IQR, 3-Sigma)
+- Radar charts and anomaly score visualizations
+
+## Project Structure
 
 ```text
-MG-GAT-BiLSTM/                      # 根目录
-├─ DataSet/                         # 数据集说明
-│  └─ Readme.md                     # ALFA / UAV GPSAttack 数据集下载链接
-├─ Model/                           # 模型定义
-│  ├─ MG_GAT_BiLSTM.py              # 主模型：多图 GAT + BiLSTM + 全局注意力 + EVT
-│  ├─ MG_GAT_BiLSTM_NoAttention.py  # 消融：去除全局注意力
-│  ├─ MG_GAT_BiLSTM_NoMIC.py        # 消融：去除 MIC 图
-│  ├─ MG_GAT_BiLSTM_NoDCOR.py       # 消融：去除 dCor 图
-│  ├─ MG_GAT_BiLSTM_NoSpearman.py   # 消融：去除 Spearman 图
-│  ├─ MLP.py                        # 基线：MLP
-│  ├─ BiLSTM.py                     # 基线：BiLSTM
-│  ├─ CNNLSTM.py                    # 基线：CNN-LSTM
-│  ├─ GRU.py                        # 基线：GRU
-│  └─ Transformer.py                # 基线：Transformer
-├─ Rada/                            # 性能雷达图绘制
-│  ├─ ALFA.py                       # 基线与 MG-GAT-BiLSTM 的性能雷达图（英文）
-│  └─ GPSattack.py                  # UAV GPSAttack 场景雷达图
-├─ anomalyscorevis/                 # 异常分数可视化结果
+MG-GAT-BiLSTM/                      # Root directory
+├─ DataSet/                         # Dataset description
+│  └─ Readme.md                     # Links to ALFA / UAV GPSAttack datasets
+├─ Model/                           # Model definitions
+│  ├─ MG_GAT_BiLSTM.py              # Main model: multi-graph GAT + BiLSTM + global attention + EVT
+│  ├─ MG_GAT_BiLSTM_NoAttention.py  # Ablation: without global attention
+│  ├─ MG_GAT_BiLSTM_NoMIC.py        # Ablation: without MIC graph
+│  ├─ MG_GAT_BiLSTM_NoDCOR.py       # Ablation: without dCor graph
+│  ├─ MG_GAT_BiLSTM_NoSpearman.py   # Ablation: without Spearman graph
+│  ├─ MLP.py                        # Baseline: MLP
+│  ├─ BiLSTM.py                     # Baseline: BiLSTM
+│  ├─ CNNLSTM.py                    # Baseline: CNN-LSTM
+│  ├─ GRU.py                        # Baseline: GRU
+│  └─ Transformer.py                # Baseline: Transformer
+├─ Rada/                            # Radar-chart visualizations
+│  ├─ ALFA.py                       # Radar chart for ALFA dataset (English)
+│  └─ GPSattack.py                  # Radar chart for UAV GPSAttack scenario
+├─ anomalyscorevis/                 # Anomaly score visualizations
 │  ├─ MG-GAT-BiLSTM.png
 │  ├─ BiLSTM.png
 │  ├─ CNN-LSTM.png
@@ -39,86 +41,86 @@ MG-GAT-BiLSTM/                      # 根目录
 │  ├─ Without Spearman.png
 │  ├─ Without dCor.png
 │  └─ Without global attention.png
-├─ training/                        # 通用训练与严格评估入口（调用上级框架）
-│  ├─ train.py                      # 通用训练入口（包装上级目录中的 train.py）
-│  └─ evaluate.py                   # 严格评估入口（包装上级目录中的 evaluate.py）
-├─ util/                            # 工具函数
-│  ├─ mic_utils.py                  # MIC/互信息特征选择
-│  ├─ normalization_utils.py        # 归一化等数据预处理工具
-│  └─ anomaly_visualization_utils.py# 单指标异常对比可视化
-├─ AblationExperiment.py            # 对消融实验结果的汇总与可视化
-├─ ThresholdCompare.py              # 不同阈值方法的比较与可视化
-└─ README.md                        # 本文件
+├─ training/                        # Generic training and strict evaluation entry points (wrap upstream framework)
+│  ├─ train.py                      # Generic training entry (wrapper around parent train.py)
+│  └─ evaluate.py                   # Strict evaluation entry (wrapper around parent evaluate.py)
+├─ util/                            # Utility functions
+│  ├─ mic_utils.py                  # MIC / mutual-information-based feature selection
+│  ├─ normalization_utils.py        # Normalization and preprocessing utilities
+│  └─ anomaly_visualization_utils.py# Single-feature anomaly vs normal visualization
+├─ AblationExperiment.py            # Aggregation and visualization of ablation-study results
+├─ ThresholdCompare.py              # Comparison of different thresholding methods
+└─ README.md                        # This file
 ```
 
-## 环境依赖
+## Requirements
 
-核心代码基于 PyTorch 和 NumPy/Scikit-Learn 实现，部分功能依赖 `torch_geometric` 与可选的 `minepy`。推荐使用 Python 3.9–3.11。
+The core code is implemented with PyTorch and NumPy/Scikit-Learn. Some components depend on `torch_geometric`, and `minepy` is optionally used for MIC computation. Recommended Python version is 3.9–3.11.
 
 - Python 3.9+
-- torch（建议使用与 CUDA 对应的版本）
-- torch-geometric（用于 GATv2Conv 图卷积，主模型中使用）
+- torch (version matching your CUDA setup is recommended)
+- torch-geometric (for GATv2Conv-based graph convolutions in the main model)
 - numpy, pandas
 - scipy
 - scikit-learn
 - matplotlib
-- minepy（可选，用于精确 MIC 计算，缺失时自动退化为互信息）
+- minepy (optional, for accurate MIC calculation; falls back to mutual information if missing)
 
-可以使用如下命令安装常用依赖（请根据实际 CUDA 版本调整 torch 与 torch-geometric 的安装方式）：
+You can install the common dependencies with (adjust `torch` and `torch-geometric` according to your CUDA version):
 
 ```bash
 pip install torch numpy pandas scipy scikit-learn matplotlib minepy
 ```
 
-关于 `torch_geometric` 的安装，请参考官方说明，例如：
+For `torch_geometric`, please follow the official installation instructions, for example:
 
 ```bash
 pip install torch-geometric -f https://data.pyg.org/whl/torch-$(python -c "import torch;print(torch.__version__)").html
 ```
 
-> 注意：`training/train.py` 与 `training/evaluate.py` 会通过相对路径加载上一级目录中的 `train.py` 和 `evaluate.py`，用于与 ALFA 等基准框架集成。实际运行前请确保本仓库放置在包含这些脚本的上级目录下。
+> Note: `training/train.py` and `training/evaluate.py` load `train.py` and `evaluate.py` from the parent directory using relative paths. This is designed to integrate with upstream benchmarks such as ALFA. Before running, ensure this repository is placed under a parent directory that contains those scripts.
 
-## 数据准备
+## Data Preparation
 
-本仓库默认在 ALFA 无人机异常检测基准和 UAV GPSAttack 数据集上进行实验，数据集链接见 `DataSet/Readme.md`：
+This repository is designed to run on the ALFA UAV anomaly detection benchmark and the UAV GPSAttack dataset. Dataset links are listed in `DataSet/Readme.md`:
 
-- ALFA 数据集：https://theairlab.org/alfa-dataset/
-- UAV GPSAttack 数据集：https://ieee-dataport.org/open-access/uav-attack-dataset
+- ALFA dataset: https://theairlab.org/alfa-dataset/
+- UAV GPSAttack dataset: https://ieee-dataport.org/open-access/uav-attack-dataset
 
-数据准备的一般流程如下：
+The general data preparation pipeline is:
 
-1. 下载原始数据集，并根据基准框架的要求进行预处理，生成训练/验证/测试拆分，以及对应的异常标签。
-2. 根据需要构建 MIC、dCor、Spearman 相关性图（可使用 `util/mic_utils.py` 配合自定义脚本）。
-3. 将预处理后的序列数据和图结构放入上级训练框架约定的目录，确保 `training/train.py` 和 `training/evaluate.py` 可以正确加载。
+1. Download the raw datasets and preprocess them according to your upstream benchmark framework, producing train/validation/test splits and corresponding anomaly labels.
+2. Construct MIC, dCor, and Spearman correlation graphs as needed (you can use `util/mic_utils.py` together with your own preprocessing scripts).
+3. Place the preprocessed sequences and graph structures in the directories expected by the upstream training framework so that `training/train.py` and `training/evaluate.py` can load them correctly.
 
-由于本仓库的训练入口是对上级目录标准 `train.py`/`evaluate.py` 的包装，具体的数据文件命名和目录结构请参考对应基准框架的文档。
+Because the training entry points in this repository are wrappers around the parent directory `train.py`/`evaluate.py`, please refer to the documentation of your upstream framework for the exact data file naming and directory structure.
 
-## 快速开始
+## Quick Start
 
-以下步骤给出在已有上级训练框架和预处理数据的前提下，如何使用本仓库进行训练、消融与阈值分析。
+The following steps assume you already have an upstream training framework and preprocessed data. They show how to use this repository for training, ablation studies, and threshold analysis.
 
-1. 训练 MG-GAT-BiLSTM 主模型
+1. Train the MG-GAT-BiLSTM main model
 
    ```bash
    cd MG-GAT-BiLSTM
 
    python training/train.py \
-     --data_dir <预处理数据目录> \
-     --config <可选：JSON 配置文件> \
+     --data_dir <preprocessed_data_dir> \
+     --config <optional: JSON config file> \
      --batch_size 64 \
      --epochs 100 \
      --learning_rate 1e-3 \
      --output_dir outputs/MG_GAT_BiLSTM
    ```
 
-   训练完成后会在指定 `output_dir` 下保存最优模型和训练摘要。
+   After training, the best model and training summary will be saved under the specified `output_dir`.
 
-2. 严格评估与异常分数导出
+2. Strict evaluation and anomaly score export
 
    ```bash
    python training/evaluate.py \
-     --model_path <best_model.pth 路径> \
-     --data_dir <测试序列目录> \
+     --model_path <path_to_best_model.pth> \
+     --data_dir <test_sequences_dir> \
      --output_dir Images/MG_GAT_BiLSTM \
      --mask_length 150 \
      --precision_mode normal \
@@ -127,21 +129,21 @@ pip install torch-geometric -f https://data.pyg.org/whl/torch-$(python -c "impor
      --auto_adjust_threshold
    ```
 
-   该脚本会调用上级目录中的评估模块，执行严格评估，并将异常分数、阈值及可视化结果保存在指定目录。
+   This script calls the evaluation module in the parent directory, performs strict evaluation, and saves anomaly scores, thresholds, and visualizations to the specified directory.
 
-3. 消融实验结果汇总
+3. Summarize ablation study results
 
-   在完成无注意力/无 MIC/无 dCor/无 Spearman 等变体模型的训练和评估后，使用：
+   After training and evaluating the variants without attention/MIC/dCor/Spearman, run:
 
    ```bash
    python AblationExperiment.py
    ```
 
-   脚本会在默认的结果目录下搜索各消融实验的 `evaluation_summary.json`，汇总 Precision/Recall/F1/ROC-AUC 等指标，并生成对比表格和柱状图。
+   The script searches default result directories for `evaluation_summary.json` from each ablation experiment, aggregates metrics such as Precision/Recall/F1/ROC-AUC, and generates comparison tables and bar charts.
 
-4. 阈值方法对比
+4. Compare thresholding methods
 
-   当你已经拥有验证集上的异常分数（单个 `.npy` 文件）以及多条测试航迹的异常分数与标签时，可以使用：
+   When you have anomaly scores on the validation set (single `.npy` file) and anomaly scores plus labels for multiple test flights, run:
 
    ```bash
    python ThresholdCompare.py \
@@ -150,29 +152,29 @@ pip install torch-geometric -f https://data.pyg.org/whl/torch-$(python -c "impor
      --output_dir Images/ThresholdCompare
    ```
 
-   其中 `test_scores_dir` 下文件命名形如：
+   The `test_scores_dir` should contain files named as:
 
    - `scores_flight_XXX.npy`
    - `labels_flight_XXX.npy`
 
-   脚本会对 POT-EVT、MAD、IQR、3-Sigma 等阈值方法在多个航迹上的 Precision/Recall/F1/ROC-AUC 进行统计并可视化。
+   The script compares POT-EVT, MAD, IQR, and 3-Sigma thresholding methods over multiple flights, reporting and visualizing Precision/Recall/F1/ROC-AUC.
 
-5. 对比与可视化
+5. Baseline comparison and visualization
 
-   - 雷达图：使用 `Rada/ALFA.py` 和 `Rada/GPSattack.py` 在 ALFA 和 UAV GPSAttack 数据上生成 MG-GAT-BiLSTM 与基线模型的性能雷达图。
-   - 异常分数曲线：`anomalyscorevis/` 下存放已生成的 PNG 图片，包括主模型及多种消融/基线模型。
+   - Radar charts: use `Rada/ALFA.py` and `Rada/GPSattack.py` to generate radar charts comparing MG-GAT-BiLSTM against baseline models on the ALFA and UAV GPSAttack datasets.
+   - Anomaly score plots: PNG images of anomaly scores for the main model, ablation variants, and baselines are stored in `anomalyscorevis/`.
 
-## 主要脚本说明
+## Main Scripts
 
-- `Model/MG_GAT_BiLSTM.py`：多图 GAT-BiLSTM 主模型，实现 MIC/dCor/Spearman 三个图分支、全局注意力和 BiLSTM 时序建模，并提供 POT-EVT 阈值计算函数，用于无监督阈值设定。
-- `Model/MG_GAT_BiLSTM_NoAttention.py`、`Model/MG_GAT_BiLSTM_NoMIC.py`、`Model/MG_GAT_BiLSTM_NoDCOR.py`、`Model/MG_GAT_BiLSTM_NoSpearman.py`：分别在全局注意力和各图分支上进行消融，用于分析各模块对性能的贡献。
-- `training/train.py`：通用训练入口函数，封装上级目录中 `train.py` 的配置与调用逻辑，支持通过命令行覆盖批大小、epoch 数和学习率等超参数。
-- `training/evaluate.py`：严格评估入口，封装上级目录中 `evaluate.py` 的调用逻辑，支持多种阈值重标定方法和严格程度设置。
-- `AblationExperiment.py`：从各消融实验的 `evaluation_summary.json` 中汇总航迹级指标，输出 CSV 表格并为论文绘图生成柱状图。
-- `ThresholdCompare.py`：在固定异常分数的前提下，对多种无监督阈值方法进行比较，输出指标统计表和可视化图像。
-- `util/mic_utils.py`：提供 MIC 或互信息驱动的特征筛选函数，可用于构建 MIC 图或为数据预处理服务。
-- `util/anomaly_visualization_utils.py`：对单一特征的正常与异常片段进行对比绘图，用于论文中示例图或调试分析。
+- `Model/MG_GAT_BiLSTM.py`: Main multi-graph GAT-BiLSTM model with MIC/dCor/Spearman branches, global attention, BiLSTM temporal modeling, and a POT-EVT thresholding function for unsupervised threshold selection.
+- `Model/MG_GAT_BiLSTM_NoAttention.py`, `Model/MG_GAT_BiLSTM_NoMIC.py`, `Model/MG_GAT_BiLSTM_NoDCOR.py`, `Model/MG_GAT_BiLSTM_NoSpearman.py`: Ablation variants removing global attention or specific graph branches to analyze their contributions.
+- `training/train.py`: Generic training entry point that wraps the parent directory `train.py`, allowing command-line overrides of batch size, number of epochs, and learning rate.
+- `training/evaluate.py`: Strict evaluation entry point wrapping the parent directory `evaluate.py`, supporting various threshold recalibration methods and strictness levels.
+- `AblationExperiment.py`: Aggregates flight-level metrics from each ablation experiment’s `evaluation_summary.json`, writes CSV summaries, and generates bar plots for use in papers.
+- `ThresholdCompare.py`: Compares multiple unsupervised thresholding methods on fixed anomaly scores, producing metric tables and visualizations.
+- `util/mic_utils.py`: MIC or mutual-information-based feature-selection utilities, useful for constructing MIC graphs and preprocessing.
+- `util/anomaly_visualization_utils.py`: Visualizes normal vs anomalous segments for a single feature, useful for examples and debugging.
 
+## Contact
 
-联系
-如有问题或建议，请联系作者。
+If you have any questions or suggestions, please open an issue or contact the author.

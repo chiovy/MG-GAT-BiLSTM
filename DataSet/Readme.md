@@ -1,0 +1,2 @@
+You can get the ALFA dataset at the following link: https://theairlab.org/alfa-dataset/
+You can get the UAVGPSAttack data set at the following link: https://ieee-dataport.org/open-access/uav-attack-dataset

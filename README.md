@@ -177,4 +177,4 @@ The following steps assume you already have an upstream training framework and p
 
 ## Contact
 
-If you have any questions or suggestions, please open an issue or contact the author.
+If you have any questions or suggestions, please submit an issue or contact the author by email: wubo@nchu.edu.cn.
